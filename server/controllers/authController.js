@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
+const { createJWT } = require('../utils');
 
 const register = async (req, res) => {
   // check for duplicated email (though it's also set up as unique on the db)
@@ -13,8 +14,13 @@ const register = async (req, res) => {
   // first registered user is an admin
   const isFirstAccount = (await User.countDocuments({})) === 0;
   const role = isFirstAccount ? 'admin' : 'user';
+
   const user = await User.create({ email, name, password, role });
-  res.status(StatusCodes.CREATED).json({ user });
+
+  const tokenUser = { name: user.name, userId: user._id, role: user.role };
+  const token = createJWT({ payload: tokenUser });
+
+  res.status(StatusCodes.CREATED).json({ user: tokenUser, token });
 };
 
 const login = async (req, res) => {
