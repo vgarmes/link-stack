@@ -21,9 +21,14 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(morgan('tiny'));
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWT_SECRET)); // cookies signed using same env var as JWT, it will be changed later
 
 app.get('/', (req, res) => {
+  res.send('link-stack API');
+});
+
+app.get('/api/v1', (req, res) => {
+  console.log(req.signedCookies);
   res.send('link-stack API');
 });
 
