@@ -3,6 +3,9 @@ import { css } from 'styled-components';
 const variables = css`
   :root {
     /* colors */
+    --color-background: white;
+    --color-text: rgb(38, 50, 56);
+    --color-secondary: rgb(57, 224, 155);
     --primary-100: #e2e0ff;
     --primary-200: #c1beff;
     --primary-300: #a29dff;
@@ -33,8 +36,9 @@ const variables = css`
     --green-dark: #0f5132;
 
     /* fonts  */
-    --headingFont: 'Roboto', sans-serif;
-    --bodyFont: 'Nunito', sans-serif;
+    --ff-primary: 'Karla', sans-serif;
+    --headingFont: 'Karla', sans-serif;
+    --bodyFont: 'Karla', sans-serif;
     --smallText: 0.7em;
     /* rest of the vars */
     --backgroundColor: var(--grey-50);
@@ -53,6 +57,9 @@ const variables = css`
       0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-4: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
       0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+    /* other */
+    --nav-height: 74px;
   }
 `;
 
