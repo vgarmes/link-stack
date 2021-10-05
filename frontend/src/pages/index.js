@@ -1,2 +1,3 @@
 import Home from './Home';
-export { Home };
+import Error from './Error';
+export { Home, Error };
