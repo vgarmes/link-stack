@@ -1,7 +1,11 @@
 const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
-const { createTokenUser, attachCookiesToResponse } = require('../utils');
+const {
+  createTokenUser,
+  attachCookiesToResponse,
+  checkPermissions,
+} = require('../utils');
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({ role: 'user' }).select('-password');
@@ -13,6 +17,7 @@ const getSingleUser = async (req, res) => {
   if (!user) {
     throw new CustomError.NotFoundError(`No user with id : ${req.params.id}`);
   }
+  checkPermissions(req.user, user._id);
   res.status(StatusCodes.OK).json({ user });
 };
 
@@ -25,6 +30,7 @@ const updateUser = async (req, res) => {
     throw new CustomError.BadRequestError('Please provide both values');
   }
 
+  //this will not trigger 'save' method in User schema
   const user = await User.findOneAndUpdate(
     { _id: req.user.userId },
     { email, name },
