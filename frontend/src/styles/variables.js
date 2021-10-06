@@ -5,6 +5,7 @@ const variables = css`
     /* colors */
     --color-background: white;
     --color-text: rgb(38, 50, 56);
+    --color-primary: #7551e9;
     --color-secondary: rgb(57, 224, 155);
     --primary-100: #e2e0ff;
     --primary-200: #c1beff;

@@ -20,6 +20,16 @@ body {
   color: var(--color-text);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5 {
+  line-height: 1.3;
+  letter-spacing: var(--letterSpacing);
+  font-weight: normal;
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -30,21 +40,47 @@ button {
   outline: none;
 }
 
+button:disabled {
+  cursor: default;
+  background: var(--grey-200);
+  color: var(--grey-400);
+}
+
 .btn-small {
   height: 32px;
   padding: 0 16px;
   border-radius: 8px;
   cursor: pointer;
   width: auto;
-  position:relative;
-  display:flex;
+  position: relative;
+  display: flex;
   flex-direction: row;
-  justify-content:center;
-  align-items:center;
+  justify-content: center;
+  align-items: center;
   color: var(--color-text);
   background: var(--color-secondary);
   font-weight: bold;
   text-transform: uppercase;
+  letter-spacing: var(--letterSpacing);
+}
+
+.btn-big {
+  height: 64px;
+  padding: 0 32px;
+  border-radius: 16px;
+  cursor: pointer;
+  width: auto;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-background);
+  background: var(--color-primary);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 20px;
+  letter-spacing: var(--letterSpacing);
 }
 
 .btn {
