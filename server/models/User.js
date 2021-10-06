@@ -6,8 +6,15 @@ const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please provide name'],
-    minlength: 3,
-    maxlength: 50,
+    minlength: [3, 'Username is too short'],
+    maxlength: [50, 'Username is too long'],
+    validate: {
+      validator: function (v) {
+        return validator.matches(v, '^[a-zA-Z0-9_.]*$');
+      },
+      message:
+        'Usernames may only contain letters, numbers, underscores ("_") and periods (".")',
+    },
   },
   email: {
     type: String,
@@ -21,7 +28,7 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Please provide password'],
-    minlength: 6,
+    minlength: [6, 'Password is too short'],
   },
   role: {
     type: String,
