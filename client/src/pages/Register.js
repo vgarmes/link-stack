@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-const rootUrl = 'http://localhost:5000';
+import axios from 'axios';
+import useLocalState from '../hooks/useLocalState';
+import { Alert } from '../components';
+import { Link } from 'react-router-dom';
 
 const StyledContainer = styled.div`
   padding-top: 32px;
@@ -9,12 +12,27 @@ const StyledContainer = styled.div`
   h1 {
     padding-bottom: 48px;
   }
+  .login-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: var(--grey-500);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `;
 
 const StyledForm = styled.form`
-  display: grid;
-  gap: 12px;
-  padding-bottom: 48px;
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--grey-200);
+
+  fieldset {
+    border: 0;
+  }
 
   label {
     display: block;
@@ -44,6 +62,7 @@ const StyledForm = styled.form`
     padding: 12px;
     background: none;
     border: none;
+    font-size: 1rem;
   }
   input:focus,
   input:active {
@@ -55,107 +74,119 @@ const StyledForm = styled.form`
   }
 
   .form-row {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
   .root-url {
     padding-left: 12px;
-    font-size: 12px;
+    font-size: 1rem;
     font-weight: bold;
     letter-spacing: var(--letterSpacing);
   }
   .submit-btn {
-    margin-top: 0.5rem;
+    width: 100%;
   }
 `;
 
 const Register = () => {
+  const initialValues = { name: '', email: '', password: '' };
   const [isIncomplete, setIsIncomplete] = useState(true);
-  const [user, setUser] = useState({
-    name: '',
-    email: '',
-    password: '',
-  });
-  const [displayMsg, setDisplayMsg] = useState('');
+  const [values, setValues] = useState({ ...initialValues });
+
+  const {
+    alert,
+    showAlert,
+    loading,
+    setLoading,
+    success,
+    setSuccess,
+    hideAlert,
+  } = useLocalState();
+
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
-    setIsIncomplete(Object.values(user).some((value) => value === ''));
-  }, [user]);
+    setIsIncomplete(Object.values(values).some((value) => value === ''));
+  }, [values]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    hideAlert();
+    setLoading(true);
+
+    // to avoid injection
+    const { name, email, password } = values;
+    const newUser = { name, email, password };
 
     try {
-      const url = `${rootUrl}/api/v1/auth/register`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      });
+      const { data } = await axios.post(`/api/v1/auth/register`, newUser);
 
-      if (response.ok) {
-        setDisplayMsg('Success!');
-      } else {
-        const message = await response.json();
-        setDisplayMsg(
-          message.msg ? JSON.stringify(message.msg) : 'Something went wrong'
-        );
-      }
+      setSuccess(true);
+      setValues({ ...initialValues });
+      showAlert({ text: data.msg, type: 'success' });
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { msg } = error.response.data;
+      showAlert({ text: msg, type: 'danger' });
     }
+    setLoading(false);
   };
 
   return (
     <StyledContainer>
       <h1>Create an account</h1>
+      {alert.show && <Alert type={alert.type}>{alert.text}</Alert>}
 
       <StyledForm onSubmit={handleSubmit}>
-        <div className="form-row">
-          <label htmlFor="username">Username</label>
-          <div className="input-box">
-            <div className="root-url">linkstack/ </div>
-            <input
-              type="username"
-              name="username"
-              value={user.name}
-              placeholder="Username"
-              onChange={(e) => setUser({ ...user, name: e.target.value })}
-            />
+        <fieldset disabled={loading || success}>
+          <div className="form-row">
+            <label htmlFor="username">Username</label>
+            <div className="input-box">
+              <div className="root-url">linkstack/ </div>
+              <input
+                type="name"
+                name="name"
+                value={values.name}
+                placeholder="Username"
+                onChange={handleChange}
+              />
+            </div>
           </div>
-        </div>
-        <div className="form-row">
-          <label htmlFor="email">Email</label>
-          <div className="input-box">
-            <input
-              type="email"
-              name="email"
-              value={user.email}
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
-            />
+          <div className="form-row">
+            <label htmlFor="email">Email</label>
+            <div className="input-box">
+              <input
+                type="email"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-        </div>
-        <div className="form-row">
-          <label htmlFor="password">Password</label>
-          <div className="input-box">
-            <input
-              type="password"
-              name="password"
-              value={user.password}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
-            />
+          <div className="form-row">
+            <label htmlFor="password">Password</label>
+            <div className="input-box">
+              <input
+                type="password"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-        </div>
+        </fieldset>
         <button
           type="submit"
           className="btn-small submit-btn"
           disabled={isIncomplete}
         >
-          Sign up
+          {loading ? 'Loading...' : 'Sign up'}
         </button>
-        <p className="error-message">{displayMsg}</p>
       </StyledForm>
+      <Link to="/login" className="login-link">
+        Already have an account?
+      </Link>
     </StyledContainer>
   );
 };
