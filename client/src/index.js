@@ -3,15 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { SessionProvider } from './context/session-context';
 import GlobalStyle from './styles/GlobalStyle';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <SessionProvider>
       <GlobalStyle />
       <App />
-    </BrowserRouter>
+    </SessionProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
