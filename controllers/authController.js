@@ -20,7 +20,7 @@ const register = async (req, res) => {
   const tokenUser = createTokenUser(user);
 
   attachCookiesToResponse({ res, user: tokenUser });
-  res.status(StatusCodes.CREATED).json({ user: tokenUser });
+  res.status(StatusCodes.CREATED).json({ user: tokenUser, msg: 'Success' });
 };
 
 const login = async (req, res) => {
