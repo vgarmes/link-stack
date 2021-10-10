@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useSessionContext } from '../context/session-context';
+import { IoPerson } from 'react-icons/io5';
 
 const StyledHeader = styled.header`
   background-color: var(--color-background);
@@ -24,6 +26,10 @@ const StyledNav = styled.nav`
     display: flex;
     align-items: center;
 
+    > :first-child:hover {
+      text-decoration: underline;
+    }
+
     > :not(:last-child) {
       margin-right: 32px;
     }
@@ -36,6 +42,12 @@ const StyledNav = styled.nav`
 `;
 
 const Navbar = () => {
+  const location = useLocation();
+  const { user, logoutUser } = useSessionContext();
+  const hideNavLinks = ['/register', '/login'].some((path) =>
+    location.pathname.includes(path)
+  );
+
   return (
     <StyledHeader>
       <StyledNav>
@@ -44,12 +56,34 @@ const Navbar = () => {
             linkstack
           </Link>
         </div>
-        <div className="nav-links">
-          <Link to="/login">Log in</Link>
-          <Link to="/register">
-            <button className="btn-small">Sign up</button>
-          </Link>
-        </div>
+
+        {!hideNavLinks && (
+          <div className="nav-links">
+            {user ? (
+              <>
+                <Link to="/">
+                  {<IoPerson />}
+                  {user.username}
+                </Link>
+                <button
+                  className="btn-small"
+                  onClick={() => {
+                    logoutUser();
+                  }}
+                >
+                  Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login">Log in</Link>
+                <Link to="/register">
+                  <button className="btn-small">Sign up</button>
+                </Link>
+              </>
+            )}
+          </div>
+        )}
       </StyledNav>
     </StyledHeader>
   );
