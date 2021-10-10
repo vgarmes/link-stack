@@ -25,15 +25,15 @@ const showCurrentUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user: req.user });
 };
 const updateUser = async (req, res) => {
-  const { email, name } = req.body;
-  if (!email || !name) {
+  const { email, username } = req.body;
+  if (!email || !username) {
     throw new CustomError.BadRequestError('Please provide both values');
   }
 
   //this will not trigger 'save' method in User schema
   const user = await User.findOneAndUpdate(
     { _id: req.user.userId },
-    { email, name },
+    { email, username },
     { new: true, runValidators: true }
   );
 

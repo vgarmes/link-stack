@@ -88,10 +88,10 @@ const StyledForm = styled.form`
 `;
 
 const Register = () => {
-  const initialValues = { name: '', email: '', password: '' };
+  const initialValues = { username: '', email: '', password: '' };
+
   const [isIncomplete, setIsIncomplete] = useState(true);
   const [values, setValues] = useState({ ...initialValues });
-
   const {
     alert,
     showAlert,
@@ -103,7 +103,7 @@ const Register = () => {
   } = useLocalState();
 
   const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    setValues({ ...values, [e.target.username]: e.target.value });
   };
 
   useEffect(() => {
@@ -116,8 +116,8 @@ const Register = () => {
     setLoading(true);
 
     // to avoid injection
-    const { name, email, password } = values;
-    const newUser = { name, email, password };
+    const { username, email, password } = values;
+    const newUser = { username, email, password };
 
     try {
       const { data } = await axios.post(`/api/v1/auth/register`, newUser);
@@ -146,8 +146,8 @@ const Register = () => {
               <div className="root-url">linkstack/ </div>
               <input
                 type="name"
-                name="name"
-                value={values.name}
+                name="username"
+                value={values.username}
                 placeholder="Username"
                 onChange={handleChange}
               />
