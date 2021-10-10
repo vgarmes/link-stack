@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import useLocalState from '../hooks/useLocalState';
 import { Alert } from '../components';
 import { Link } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as yup from 'yup';
 
 const StyledContainer = styled.div`
   padding-top: 32px;
@@ -82,108 +84,129 @@ const StyledForm = styled.form`
     font-weight: bold;
     letter-spacing: var(--letterSpacing);
   }
+  .error-message {
+    color: red;
+    font-size: var(--font-size-xs);
+    margin-top: 0.5rem;
+  }
+  .error-message::first-letter {
+    text-transform: capitalize;
+  }
   .submit-btn {
     width: 100%;
   }
 `;
 
+const validationSchema = yup.object({
+  username: yup
+    .string()
+    .required()
+    .min(3)
+    .max(50)
+    .matches(
+      /^[a-zA-Z0-9_.]*$/,
+      'Usernames may only contain letters, numbers, underscores ("_") and periods (".")'
+    ),
+  email: yup.string().required().email(),
+  password: yup
+    .string()
+    .required('Please Enter your password')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+      'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character'
+    ),
+});
+
 const Register = () => {
   const initialValues = { username: '', email: '', password: '' };
+  const { alert, showAlert, success, setSuccess, hideAlert } = useLocalState();
 
-  const [isIncomplete, setIsIncomplete] = useState(true);
-  const [values, setValues] = useState({ ...initialValues });
-  const {
-    alert,
-    showAlert,
-    loading,
-    setLoading,
-    success,
-    setSuccess,
-    hideAlert,
-  } = useLocalState();
+  const handleSubmit = async (values) => {
+    /*
+    return new Promise((res) => {
+      setTimeout(() => {
+        console.log(values);
 
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.username]: e.target.value });
-  };
+        res();
+      }, 3000);
+    });
+    */
 
-  useEffect(() => {
-    setIsIncomplete(Object.values(values).some((value) => value === ''));
-  }, [values]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
     hideAlert();
-    setLoading(true);
-
     // to avoid injection
     const { username, email, password } = values;
     const newUser = { username, email, password };
 
     try {
       const { data } = await axios.post(`/api/v1/auth/register`, newUser);
-
       setSuccess(true);
-      setValues({ ...initialValues });
       showAlert({ text: data.msg, type: 'success' });
     } catch (error) {
       console.log(error.response);
       const { msg } = error.response.data;
       showAlert({ text: msg, type: 'danger' });
     }
-    setLoading(false);
   };
 
   return (
     <StyledContainer>
       <h1>Create an account</h1>
       {alert.show && <Alert type={alert.type}>{alert.text}</Alert>}
+      <Formik
+        validateOnChange={true}
+        validateOnMount={true}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, errors, touched, isSubmitting, isValid }) => (
+          <StyledForm as={Form}>
+            <fieldset disabled={isSubmitting || success}>
+              <div className="form-row">
+                <label htmlFor="username">Username</label>
+                <div className="input-box">
+                  <div className="root-url">linkstack/ </div>
+                  <Field
+                    type="username"
+                    name="username"
+                    placeholder="Username"
+                  />
+                </div>
+                <div className="error-message">
+                  <ErrorMessage name="username" />
+                </div>
+              </div>
+              <div className="form-row">
+                <label htmlFor="email">Email</label>
+                <div className="input-box">
+                  <Field type="email" name="email" />
+                </div>
+                <div className="error-message">
+                  <ErrorMessage name="email" />
+                </div>
+              </div>
+              <div className="form-row">
+                <label htmlFor="password">Password</label>
+                <div className="input-box">
+                  <Field type="password" name="password" />
+                </div>
+                <div className="error-message">
+                  <ErrorMessage name="password" />
+                </div>
+              </div>
+            </fieldset>
 
-      <StyledForm onSubmit={handleSubmit}>
-        <fieldset disabled={loading || success}>
-          <div className="form-row">
-            <label htmlFor="username">Username</label>
-            <div className="input-box">
-              <div className="root-url">linkstack/ </div>
-              <input
-                type="name"
-                name="username"
-                value={values.username}
-                placeholder="Username"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <label htmlFor="email">Email</label>
-            <div className="input-box">
-              <input
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <label htmlFor="password">Password</label>
-            <div className="input-box">
-              <input
-                type="password"
-                name="password"
-                value={values.password}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-        </fieldset>
-        <button
-          type="submit"
-          className="btn-small submit-btn"
-          disabled={isIncomplete}
-        >
-          {loading ? 'Loading...' : 'Sign up'}
-        </button>
-      </StyledForm>
+            <button
+              type="submit"
+              className="btn-small submit-btn"
+              disabled={!isValid || isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Sign up'}
+            </button>
+          </StyledForm>
+        )}
+      </Formik>
+
       <Link to="/login" className="login-link">
         Already have an account?
       </Link>
