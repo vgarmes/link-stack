@@ -41,6 +41,12 @@ const variables = css`
     --headingFont: 'Karla', sans-serif;
     --bodyFont: 'Karla', sans-serif;
     --smallText: 0.7em;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-xxl: 1.375rem;
     /* rest of the vars */
     --backgroundColor: var(--grey-50);
     --textColor: var(--grey-900);
