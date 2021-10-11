@@ -57,7 +57,7 @@ button:disabled {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  color: var(--color-text);
+  color: var(--color-background);
   background: var(--color-secondary);
   font-weight: bold;
   text-transform: uppercase;
