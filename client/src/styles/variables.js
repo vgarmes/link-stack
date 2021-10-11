@@ -4,18 +4,10 @@ const variables = css`
   :root {
     /* colors */
     --color-background: white;
-    --color-text: rgb(38, 50, 56);
-    --color-primary: #7551e9;
-    --color-secondary: rgb(57, 224, 155);
-    --primary-100: #e2e0ff;
-    --primary-200: #c1beff;
-    --primary-300: #a29dff;
-    --primary-400: #837dff;
-    --primary-500: #645cff;
-    --primary-600: #504acc;
-    --primary-700: #3c3799;
-    --primary-800: #282566;
-    --primary-900: #141233;
+    --color-text: hsl(222deg, 22%, 5%);
+    --color-primary: hsl(245deg, 100%, 60%);
+    --color-secondary: hsl(333deg, 100%, 45%);
+    --color-tertiary: hsl(255deg, 85%, 30%);
 
     /* grey */
     --grey-50: #f8fafc;
