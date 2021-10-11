@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('express-async-errors');
+const path = require('path');
 
 // express
 const express = require('express');
@@ -28,18 +29,21 @@ app.use(cookieParser(process.env.JWT_SECRET)); // cookies signed using same env 
 // security packages
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('link-stack API');
-});
-
+// API
 app.get('/api/v1', (req, res) => {
   console.log(req.signedCookies);
   res.send('link-stack API');
 });
-
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 
+// Static assets
+app.use(express.static('client/build'));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
+
+// Other middleware
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
