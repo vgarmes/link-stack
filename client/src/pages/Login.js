@@ -51,7 +51,7 @@ const Login = () => {
         type: 'success',
       });
       saveUser(data.user);
-      history.push('/');
+      history.push('/dashboard');
       setSuccess(true);
     } catch (error) {
       showAlert({ text: error.response.data.msg });
