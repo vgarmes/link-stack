@@ -39,6 +39,15 @@ const StyledNav = styled.nav`
     font-weight: 700;
     margin-right: 32px;
   }
+
+  .user {
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    > :first-child {
+      margin-right: 0.5em;
+    }
+  }
 `;
 
 const Navbar = () => {
@@ -61,7 +70,7 @@ const Navbar = () => {
           <div className="nav-links">
             {user ? (
               <>
-                <Link to="/">
+                <Link to="/dashboard" className="user">
                   {<IoPerson />}
                   {user.username}
                 </Link>
