@@ -1,92 +1,97 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-const rootUrl = 'http://localhost:5000';
+import axios from 'axios';
+import useLocalState from '../hooks/useLocalState';
+import { useSessionContext } from '../context/session-context';
+import { Alert, StyledForm, FormRow } from '../components';
+import { Link, useHistory } from 'react-router-dom';
+import { Formik, Form, Field } from 'formik';
+import * as yup from 'yup';
 
-const LoginForm = styled.form`
-width: 90vh;
-max-width: 400px;
-background: var(--white);
-border-radius: var(--borderRadius);
-box-shadow: var(--shadow-2);
-padding: 2rem 2.5rem;
-margin 0 auto;
+const StyledContainer = styled.div`
+  padding-top: 32px;
+  max-width: 500px;
+  margin: 0 auto;
+  h1 {
+    padding-bottom: 48px;
+  }
+  .login-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: var(--grey-500);
 
-label {
-  display:block;
-  font-size: var(--smallText);
-  margin-bottom: 0.5rem;
-  text-transform: capitalize;
-  letter-spacing: var(--letterSpacing);
-}
-input,
-textarea {
-  width: 100%;
-  padding: 0.375rem 0.75rem;
-  border-radius: var(--borderRadius);
-  background: var(--backgroundColor);
-  border: 1px solid var(--grey-200);
-}
-.form-row {
-  margin-bottom: 1rem;
-}
-.submit-btn {
-  margin-top:0.5rem;
-}
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `;
 
-const Login = () => {
-  const [email, setEmail] = useState('john@example.com');
-  const [password, setPassword] = useState('secret');
+const validationSchema = yup.object({
+  email: yup.string().required(),
+  password: yup.string().required(),
+});
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !password) return;
-    const user = { email, password };
+const Login = () => {
+  const { saveUser } = useSessionContext();
+  const history = useHistory();
+  const initialValues = { email: '', password: '' };
+  const { alert, showAlert, success, setSuccess, hideAlert } = useLocalState();
+
+  const handleSubmit = async (values) => {
+    hideAlert();
+    const { email, password } = values;
+    const loginUser = { email, password };
 
     try {
-      const url = `${rootUrl}/api/v1/auth/login`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(user),
+      const { data } = await axios.post('/api/v1/auth/login', loginUser);
+      showAlert({
+        text: `Welcome, ${data.user.username}. Redirecting to dashboard...`,
+        type: 'success',
       });
-      const result = await response.json();
-      console.log(result);
-      setPassword('');
-      setEmail('');
+      saveUser(data.user);
+      history.push('/');
+      setSuccess(true);
     } catch (error) {
-      console.log(error);
+      showAlert({ text: error.response.data.msg });
     }
   };
 
   return (
-    <div>
-      <LoginForm onSubmit={handleSubmit}>
-        <div className="form-row">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="form-row">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" className="btn btn-block submit-btn">
-          submit
-        </button>
-      </LoginForm>
-    </div>
+    <StyledContainer>
+      <h1>Sign in to your Linkstack account</h1>
+      {alert.show && <Alert type={alert.type}>{alert.text}</Alert>}
+      <Formik
+        validateOnChange={true}
+        validateOnMount={true}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, isSubmitting, isValid }) => (
+          <StyledForm as={Form} isDisabled={[isSubmitting, success]}>
+            <FormRow label="email">
+              <Field type="email" name="email" />
+            </FormRow>
+            <FormRow label="password">
+              <Field type="password" name="password" />
+            </FormRow>
+
+            <button
+              type="submit"
+              className="btn-small submit-btn"
+              disabled={!isValid || isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Log in'}
+            </button>
+          </StyledForm>
+        )}
+      </Formik>
+      <Link to="/register" className="login-link">
+        Don't have an account?
+      </Link>
+    </StyledContainer>
   );
 };
 

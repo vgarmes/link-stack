@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import useLocalState from '../hooks/useLocalState';
-import { Alert } from '../components';
+import { Alert, StyledForm, FormRow } from '../components';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
@@ -24,76 +24,6 @@ const StyledContainer = styled.div`
     &:hover {
       text-decoration: underline;
     }
-  }
-`;
-
-const StyledForm = styled.form`
-  padding-bottom: 1rem;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid var(--grey-200);
-
-  fieldset {
-    border: 0;
-  }
-
-  label {
-    display: block;
-    font-size: var(--smallText);
-    margin-bottom: 0.5rem;
-    text-transform: capitalize;
-    letter-spacing: var(--letterSpacing);
-  }
-  .input-box {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    border-radius: var(--borderRadius);
-    background: var(--grey-100);
-    border: 2px solid;
-    border-color: transparent;
-    &:focus-within {
-      border-color: black;
-    }
-  }
-  input,
-  textarea {
-    outline-color: black;
-    border-radius: var(--borderRadius);
-    width: 100%;
-    padding: 12px;
-    background: none;
-    border: none;
-    font-size: 1rem;
-  }
-  input:focus,
-  input:active {
-    background: none;
-    outline: none;
-  }
-  input::placeholder {
-    color: var(--grey-400);
-  }
-
-  .form-row {
-    margin-bottom: 2rem;
-  }
-  .root-url {
-    padding-left: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    letter-spacing: var(--letterSpacing);
-  }
-  .error-message {
-    color: red;
-    font-size: var(--font-size-xs);
-    margin-top: 0.5rem;
-  }
-  .error-message::first-letter {
-    text-transform: capitalize;
-  }
-  .submit-btn {
-    width: 100%;
   }
 `;
 
@@ -122,18 +52,8 @@ const Register = () => {
   const { alert, showAlert, success, setSuccess, hideAlert } = useLocalState();
 
   const handleSubmit = async (values) => {
-    /*
-    return new Promise((res) => {
-      setTimeout(() => {
-        console.log(values);
-
-        res();
-      }, 3000);
-    });
-    */
-
     hideAlert();
-    // to avoid injection
+
     const { username, email, password } = values;
     const newUser = { username, email, password };
 
@@ -159,42 +79,29 @@ const Register = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, errors, touched, isSubmitting, isValid }) => (
-          <StyledForm as={Form}>
-            <fieldset disabled={isSubmitting || success}>
-              <div className="form-row">
-                <label htmlFor="username">Username</label>
-                <div className="input-box">
-                  <div className="root-url">linkstack/ </div>
-                  <Field
-                    type="username"
-                    name="username"
-                    placeholder="Username"
-                  />
-                </div>
-                <div className="error-message">
-                  <ErrorMessage name="username" />
-                </div>
-              </div>
-              <div className="form-row">
-                <label htmlFor="email">Email</label>
-                <div className="input-box">
-                  <Field type="email" name="email" />
-                </div>
-                <div className="error-message">
-                  <ErrorMessage name="email" />
-                </div>
-              </div>
-              <div className="form-row">
-                <label htmlFor="password">Password</label>
-                <div className="input-box">
-                  <Field type="password" name="password" />
-                </div>
-                <div className="error-message">
-                  <ErrorMessage name="password" />
-                </div>
-              </div>
-            </fieldset>
+        {({ isSubmitting, isValid }) => (
+          <StyledForm as={Form} isDisabled={[isSubmitting, success]}>
+            <FormRow
+              label="username"
+              fixedPlaceholder="linkstack/"
+              errorMessages={<ErrorMessage name="username" />}
+            >
+              <Field type="username" name="username" placeholder="Username" />
+            </FormRow>
+
+            <FormRow
+              label="email"
+              errorMessages={<ErrorMessage name="email" />}
+            >
+              <Field type="email" name="email" />
+            </FormRow>
+
+            <FormRow
+              label="password"
+              errorMessages={<ErrorMessage name="password" />}
+            >
+              <Field type="password" name="password" />
+            </FormRow>
 
             <button
               type="submit"
