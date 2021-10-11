@@ -2,6 +2,8 @@
 
 ### [🚀 See the app in action 🚀](https://linkstack-app.herokuapp.com/)
 
+(Currently under development. So far only authentication is implemented on the deployed site)
+
 ## Tech stack
 
 - Backend (main folder): Node JS with Express
