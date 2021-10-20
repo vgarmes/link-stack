@@ -1,7 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import { Home, Login, Register, Error, Dashboard, PrivateRoute } from './pages';
+import {
+  Home,
+  Login,
+  Register,
+  Error,
+  Dashboard,
+  PrivateRoute,
+  Verify,
+} from './pages';
 import { Layout } from './components';
 
 function App() {
@@ -21,6 +29,9 @@ function App() {
           <PrivateRoute path="/dashboard">
             <Dashboard />
           </PrivateRoute>
+          <Route path="/user/verify-email">
+            <Verify />
+          </Route>
           <Route path="*">
             <Error />
           </Route>
