@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { useLocation, Link } from 'react-router-dom';
 import { useSessionContext } from '../context/session-context';
 import axios from 'axios';
@@ -34,21 +35,42 @@ const Verify = () => {
   }, []);
 
   if (loading) {
-    return <h2>Loading...</h2>;
+    return (
+      <Wrapper>
+        <h2>Loading...</h2>
+      </Wrapper>
+    );
   }
 
   if (error) {
     return (
-      <h4>There was an error, please double check your verification link</h4>
+      <Wrapper>
+        <h2>There was an error, please double check your verification link</h2>
+      </Wrapper>
     );
   }
 
   return (
-    <div>
-      <h2>Account confirmed</h2>
-      <Link to="/login">Please login</Link>
-    </div>
+    <Wrapper>
+      <h2>Account confirmed!</h2>
+      <Link to="/login">Log in</Link>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 50vh;
+  text-align: center;
+  a {
+    margin-top: 1rem;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 export default Verify;
