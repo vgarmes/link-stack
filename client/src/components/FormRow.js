@@ -41,7 +41,6 @@ const Wrapper = styled.div`
 `;
 
 const FormRow = ({ children, label, fixedPlaceholder, errorMessages }) => {
-  console.log(children);
   return (
     <Wrapper>
       <label htmlFor={label}>{label}</label>
