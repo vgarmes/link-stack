@@ -31,9 +31,9 @@ const register = async (req, res) => {
   });
 
   const origin =
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:3000'
-      : req.get('origin');
+    process.env.NODE_ENV === 'production'
+      ? req.get('origin')
+      : 'http://localhost:3000';
 
   await sendVerificationEmail({
     username: user.username,
@@ -44,7 +44,7 @@ const register = async (req, res) => {
 
   // send verification token back only while testing in postman!
   res.status(StatusCodes.CREATED).json({
-    msg: 'Success! Please check your email to verify your account',
+    msg: 'Success!',
   });
 };
 
@@ -85,9 +85,11 @@ const login = async (req, res) => {
     throw new CustomError.UnauthenticatedError('Invalid Credentials');
   }
 
+  /* UNCOMMENT THIS WHEN USING EMAIL VERIFICATION! 
   if (!user.isVerified) {
     throw new CustomError.UnauthenticatedError('Please verify your email.');
-  }
+  } 
+  */
 
   const tokenUser = createTokenUser(user);
   attachCookiesToResponse({ res, user: tokenUser });
