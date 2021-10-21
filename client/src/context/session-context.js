@@ -26,7 +26,7 @@ const SessionProvider = ({ children }) => {
 
   const logoutUser = async () => {
     try {
-      await axios.get('/api/v1/auth/logout');
+      await axios.delete('/api/v1/auth/logout');
       removeUser();
     } catch (error) {
       console.log(error);
