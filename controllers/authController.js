@@ -6,8 +6,15 @@ const {
   attachCookiesToResponse,
   createTokenUser,
   sendVerificationEmail,
+  sendResetPasswordEmail,
 } = require('../utils');
 const crypto = require('crypto');
+
+function getOrigin(request) {
+  return process.env.NODE_ENV === 'production'
+    ? request.get('origin')
+    : 'http://localhost:3000';
+}
 
 const register = async (req, res) => {
   // check for duplicated email (though it's also set up as unique on the db)
@@ -31,10 +38,7 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-  const origin =
-    process.env.NODE_ENV === 'production'
-      ? req.get('origin')
-      : 'http://localhost:3000';
+  const origin = getOrigin(req);
 
   await sendVerificationEmail({
     username: user.username,
@@ -138,4 +142,50 @@ const logout = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
 };
 
-module.exports = { register, verifyEmail, login, logout };
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new CustomError.BadRequestError('Please provide valid email');
+  }
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    const passwordToken = crypto.randomBytes(70).toString('hex');
+    // send email
+
+    const origin = getOrigin(req);
+
+    await sendResetPasswordEmail({
+      username: user.username,
+      email: user.email,
+      token: passwordToken,
+      origin,
+    });
+    const expiration = 1000 * 60 * 10; // 10 minutes
+    const passwordTokenExpirationDate = new Date(Date.now() + expiration);
+
+    user.passwordToken = passwordToken;
+    user.passwordTokenExpirationDate = passwordTokenExpirationDate;
+    await user.save();
+  }
+
+  // we always send the same response so possible attackers can't know if an email exists or not
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: 'Please check your email for forget password link' });
+};
+
+const resetPassword = async (req, res) => {
+  res.send('reset password');
+};
+
+module.exports = {
+  register,
+  login,
+  logout,
+  verifyEmail,
+  forgotPassword,
+  resetPassword,
+};
