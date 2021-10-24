@@ -9,6 +9,8 @@ import {
   Dashboard,
   PrivateRoute,
   Verify,
+  ForgotPassword,
+  ResetPassword,
 } from './pages';
 import { Layout } from './components';
 
@@ -31,6 +33,12 @@ function App() {
           </PrivateRoute>
           <Route path="/user/verify-email">
             <Verify />
+          </Route>
+          <Route path="/forgot-password">
+            <ForgotPassword />
+          </Route>
+          <Route path="/user/reset-password">
+            <ResetPassword />
           </Route>
           <Route path="*">
             <Error />
