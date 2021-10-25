@@ -40,10 +40,16 @@ const Wrapper = styled.div`
   }
 `;
 
-const FormRow = ({ children, label, fixedPlaceholder, errorMessages }) => {
+const FormRow = ({
+  children,
+  label,
+  text,
+  fixedPlaceholder,
+  errorMessages,
+}) => {
   return (
     <Wrapper>
-      <label htmlFor={label}>{label}</label>
+      <label htmlFor={label}>{text ? text : label}</label>
       <div className="input-box">
         {fixedPlaceholder && (
           <div className="fixed-placeholder">{fixedPlaceholder}</div>
