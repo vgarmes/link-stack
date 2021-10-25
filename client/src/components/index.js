@@ -4,4 +4,5 @@ import Hero from './Hero';
 import Alert from './Alert';
 import StyledForm from './StyledForm';
 import FormRow from './FormRow';
-export { Layout, Navbar, Hero, Alert, StyledForm, FormRow };
+import SectionCenter from './SectionCenter';
+export { Layout, Navbar, Hero, Alert, StyledForm, FormRow, SectionCenter };
