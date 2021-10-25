@@ -1,33 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
 import useLocalState from '../hooks/useLocalState';
-import { Alert, StyledForm, FormRow } from '../components';
+import {
+  SectionCenter,
+  Button,
+  Alert,
+  StyledForm,
+  FormRow,
+} from '../components';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Formik, Form, Field } from 'formik';
 import * as yup from 'yup';
-
-const StyledContainer = styled.div`
-  padding: 48px 80px;
-  max-width: 640px;
-  margin: 64px auto;
-  border: 1px solid var(--grey-200);
-  border-radius: var(--borderRadius);
-  h1 {
-    padding-bottom: 48px;
-  }
-  .login-link {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    color: var(--grey-500);
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
 
 const validationSchema = yup.object({
   email: yup.string().required().email(),
@@ -58,7 +41,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <StyledContainer>
+    <SectionCenter>
       <h1>Enter your Linkstack username to receive a password reset email.</h1>
       {alert.show && <Alert type={alert.type}>{alert.text}</Alert>}
       <Formik
@@ -74,20 +57,20 @@ const ForgotPassword = () => {
               <Field type="email" name="email" />
             </FormRow>
 
-            <button
+            <Button
               type="submit"
-              className="btn-small submit-btn"
+              isFullWidth={true}
               disabled={!isValid || isSubmitting}
             >
               {isSubmitting ? 'Sending...' : 'Reset password'}
-            </button>
+            </Button>
           </StyledForm>
         )}
       </Formik>
       <Link to="/register" className="login-link">
         Back to login
       </Link>
-    </StyledContainer>
+    </SectionCenter>
   );
 };
 

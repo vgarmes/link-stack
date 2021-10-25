@@ -67,8 +67,6 @@ const Login = () => {
             <Button
               type="submit"
               disabled={!isValid || isSubmitting}
-              size="md"
-              colorScheme="primary"
               isFullWidth={true}
             >
               {isSubmitting ? 'Submitting...' : 'Log in'}

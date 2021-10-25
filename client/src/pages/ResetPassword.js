@@ -2,7 +2,13 @@ import React from 'react';
 import { useLocation, useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import useLocalState from '../hooks/useLocalState';
-import { SectionCenter, Alert, StyledForm, FormRow } from '../components';
+import {
+  SectionCenter,
+  Button,
+  Alert,
+  StyledForm,
+  FormRow,
+} from '../components';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 
@@ -86,13 +92,14 @@ const ResetPassword = () => {
               <Field type="password" name="repeatPassword" />
             </FormRow>
 
-            <button
+            <Button
               type="submit"
-              className="btn-small submit-btn"
+              colorScheme="secondary"
+              isFullWidth={true}
               disabled={!isValid || isSubmitting}
             >
               {isSubmitting ? 'Sending...' : 'Reset password'}
-            </button>
+            </Button>
           </StyledForm>
         )}
       </Formik>

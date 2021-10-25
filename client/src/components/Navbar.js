@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
 import { useSessionContext } from '../context/session-context';
 import { IoPerson } from 'react-icons/io5';
+import { Button } from './';
 
 const StyledHeader = styled.header`
   background-color: var(--color-background);
@@ -74,20 +75,23 @@ const Navbar = () => {
                   {<IoPerson />}
                   {user.username}
                 </Link>
-                <button
-                  className="btn-small"
+                <Button
+                  size="sm"
+                  colorScheme="secondary"
                   onClick={() => {
                     logoutUser();
                   }}
                 >
-                  Log out
-                </button>
+                  <span style={{ textTransform: 'uppercase' }}>Log out</span>
+                </Button>
               </>
             ) : (
               <>
                 <Link to="/login">Log in</Link>
                 <Link to="/register">
-                  <button className="btn-small">Sign up</button>
+                  <Button size="sm" colorScheme="secondary">
+                    <span style={{ textTransform: 'uppercase' }}>Sign up</span>
+                  </Button>
                 </Link>
               </>
             )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Button } from './';
 
 const StyledHero = styled.div`
   display: flex;
@@ -31,6 +32,10 @@ const StyledHero = styled.div`
       text-decoration: underline;
     }
   }
+  .button-text {
+    font-size: var(--font-size-xl);
+    text-transform: uppercase;
+  }
 `;
 
 const Hero = () => {
@@ -43,7 +48,9 @@ const Hero = () => {
         </h2>
       </div>
       <Link to="/register">
-        <button className="btn-big">Get started for free</button>
+        <Button size="lg">
+          <span className="button-text">Get started for free</span>
+        </Button>
       </Link>
       <div className="sign-in-cta">
         <p>

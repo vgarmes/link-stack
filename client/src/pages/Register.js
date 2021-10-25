@@ -1,31 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
 import axios from 'axios';
 import useLocalState from '../hooks/useLocalState';
-import { Alert, StyledForm, FormRow } from '../components';
+import {
+  SectionCenter,
+  Button,
+  Alert,
+  StyledForm,
+  FormRow,
+} from '../components';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-
-const StyledContainer = styled.div`
-  padding-top: 32px;
-  max-width: 500px;
-  margin: 0 auto;
-  h1 {
-    padding-bottom: 48px;
-  }
-  .login-link {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    color: var(--grey-500);
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
 
 const validationSchema = yup.object({
   username: yup
@@ -69,7 +54,7 @@ const Register = () => {
   };
 
   return (
-    <StyledContainer>
+    <SectionCenter>
       <h1>Create an account</h1>
       {alert.show && <Alert type={alert.type}>{alert.text}</Alert>}
       <Formik
@@ -103,13 +88,13 @@ const Register = () => {
               <Field type="password" name="password" />
             </FormRow>
 
-            <button
+            <Button
               type="submit"
-              className="btn-small submit-btn"
               disabled={!isValid || isSubmitting}
+              isFullWidth={true}
             >
               {isSubmitting ? 'Submitting...' : 'Sign up'}
-            </button>
+            </Button>
           </StyledForm>
         )}
       </Formik>
@@ -117,7 +102,7 @@ const Register = () => {
       <Link to="/login" className="login-link">
         Already have an account?
       </Link>
-    </StyledContainer>
+    </SectionCenter>
   );
 };
 
