@@ -7,6 +7,7 @@ const {
   createTokenUser,
   sendVerificationEmail,
   sendResetPasswordEmail,
+  createHash,
 } = require('../utils');
 const crypto = require('crypto');
 
@@ -166,7 +167,7 @@ const forgotPassword = async (req, res) => {
     const expiration = 1000 * 60 * 10; // 10 minutes
     const passwordTokenExpirationDate = new Date(Date.now() + expiration);
 
-    user.passwordToken = passwordToken;
+    user.passwordToken = createHash(passwordToken);
     user.passwordTokenExpirationDate = passwordTokenExpirationDate;
     await user.save();
   }
@@ -178,7 +179,29 @@ const forgotPassword = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
-  res.send('reset password');
+  const { token, email, password } = req.body;
+
+  if (!token || !email || !password) {
+    throw new CustomError.BadRequestError('Please provide all values');
+  }
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    const currentDate = new Date();
+
+    if (
+      user.passwordToken === createHash(token) &&
+      user.passwordTokenExpirationDate > currentDate
+    ) {
+      user.password = password;
+      user.passwordToken = null;
+      user.passwordTokenExpirationDate = null;
+      await user.save();
+    }
+  }
+
+  res.status(StatusCodes.OK).json({ msg: 'Success' });
 };
 
 module.exports = {
