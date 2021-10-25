@@ -39,7 +39,7 @@ const ResetPassword = () => {
     const { newPassword } = values;
     try {
       await axios.post('/api/v1/auth/reset-password', {
-        newPassword,
+        password: newPassword,
         token: query.get('token'),
         email: query.get('email'),
       });
