@@ -4,7 +4,6 @@ import styled from 'styled-components';
 const Wrapper = styled.form`
   padding-bottom: 1rem;
   margin-bottom: 0.5rem;
-  border-bottom: 1px solid var(--grey-200);
 
   fieldset {
     border: 0;
