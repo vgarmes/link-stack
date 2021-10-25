@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ThemeProvider } from 'styled-components';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { SessionProvider } from './context/session-context';
-import GlobalStyle from './styles/GlobalStyle';
+import { GlobalStyle, theme } from './styles';
 
 ReactDOM.render(
   <React.StrictMode>
     <SessionProvider>
-      <GlobalStyle />
-      <App />
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <App />
+      </ThemeProvider>
     </SessionProvider>
   </React.StrictMode>,
   document.getElementById('root')
