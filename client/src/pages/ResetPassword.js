@@ -33,12 +33,9 @@ const validationSchema = yup.object({
 const ResetPassword = () => {
   const initialValues = { newEmail: '', repeatPassword: '' };
   const history = useHistory();
-  const { alert, showAlert, loading, setLoading, success, setSuccess } =
-    useLocalState();
+  const { alert, showAlert, setLoading, success, setSuccess } = useLocalState();
 
   const query = useQuery();
-
-  console.log(loading);
 
   const handleSubmit = async (values) => {
     setLoading(true);

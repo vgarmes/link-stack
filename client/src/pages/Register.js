@@ -47,7 +47,6 @@ const Register = () => {
       setSuccess(true);
       showAlert({ text: data.msg, type: 'success' });
     } catch (error) {
-      console.log(error.response);
       const { msg } = error.response.data;
       showAlert({ text: msg, type: 'danger' });
     }

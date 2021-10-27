@@ -14,7 +14,6 @@ Wrapper.defaultProps = {
 };
 
 const Button = ({ children, ...rest }) => {
-  console.log(rest);
   return <Wrapper {...rest}>{children}</Wrapper>;
 };
 
