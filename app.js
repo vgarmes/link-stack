@@ -14,6 +14,7 @@ const helmet = require('helmet');
 const xss = require('xss-clean');
 const cors = require('cors');
 const mongoSanitize = require('express-mongo-sanitize');
+const fileUpload = require('express-fileupload');
 
 // database
 const connectDB = require('./db/connect');
@@ -21,6 +22,7 @@ const connectDB = require('./db/connect');
 // routers
 const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
+const linkstackRouter = require('./routes/linkstackRoutes');
 
 // middleware
 const notFoundMiddleware = require('./middleware/not-found');
@@ -50,6 +52,7 @@ app.get('/api/v1', (req, res) => {
 });
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/linkstacks', linstackRouter);
 
 // Static assets
 app.use(express.static('client/build'));
