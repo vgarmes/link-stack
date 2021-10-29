@@ -20,19 +20,48 @@ const createLinkstack = async (req, res) => {
 };
 
 const getAllLinkstacks = async (req, res) => {
-  res.send('get all linkstacks');
+  const linkstacks = await Linkstack.find({});
+  res.status(StatusCodes.OK).json({ linkstacks, count: linkstacks.length });
 };
 
 const getSingleLinkstack = async (req, res) => {
-  res.send('get single linkstack');
+  const { id: linkstackId } = req.params;
+
+  const linkstack = await Linkstack.findOne({ _id: linkstackId });
+
+  if (!linkstack) {
+    throw new CustomError.NotFoundError(`No linkstack with id: ${linkstackId}`);
+  }
+  res.status(StatusCodes.OK).json({ linkstack });
 };
 
 const updateLinkstack = async (req, res) => {
-  res.send('update linkstack');
+  const { id: linkstackId } = req.params;
+
+  const linkstack = await Linkstack.findOneAndUpdate(
+    { _id: linkstackId },
+    req.body,
+    { new: true, runValidators: true }
+  );
+
+  if (!linkstack) {
+    throw new CustomError.NotFoundError(`No linkstack with id: ${linkstackId}`);
+  }
+
+  res.status(StatusCodes.OK).json({ linkstack });
 };
 
 const deleteLinkstack = async (req, res) => {
-  res.send('delete linkstack');
+  const { id: linkstackId } = req.params;
+  const linkstack = await Linkstack.findOne({ _id: linkstackId });
+
+  if (!linkstack) {
+    throw new CustomError.NotFoundError(`No linkstack with id: ${linkstackId}`);
+  }
+
+  await linkstack.remove();
+
+  res.status(StatusCodes.OK).json({ msg: 'Success! Linkstack removed' });
 };
 
 const uploadImage = async (req, res) => {
