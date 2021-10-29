@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+const SingleLinkSchema = new mongoose.Schema({
+  name: { type: String, required: true, maxlength: 100 },
+  icon: { type: String, required: true },
+  url: { type: String, required: true, maxlength: 1000 },
+});
+
+const SingleSocialSchema = new mongoose.Schema({
+  icon: { type: String, required: true },
+  url: { type: String, required: true, maxlength: 1000 },
+});
+
 const LinkstackSchema = new mongoose.Schema(
   {
     name: {
@@ -10,16 +21,14 @@ const LinkstackSchema = new mongoose.Schema(
     bio: {
       type: String,
       maxlength: [1000, 'Bio can not be more than 1000 characters'],
+      default: '',
     },
     image: {
       type: String,
+      default: '',
     },
-    links: {
-      type: String,
-    },
-    social: {
-      type: String,
-    },
+    links: [SingleLinkSchema],
+    social: [SingleSocialSchema],
     user: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
