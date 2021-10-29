@@ -1,9 +1,26 @@
+const Linkstack = require('../models/Linkstack');
+const { StatusCodes } = require('http-status-codes');
+const CustomError = require('../errors');
+
 const createLinkstack = async (req, res) => {
-  res.send('create linkstack');
+  req.body.user = req.user.userId;
+
+  const linkstackAlreadyExists = await Linkstack.findOne({
+    user: req.body.user,
+  });
+  if (linkstackAlreadyExists) {
+    throw new CustomError.BadRequestError(
+      `Linkstack already exists for user ${req.body.user}`
+    );
+  }
+
+  const linkstack = await Linkstack.create(req.body);
+
+  res.status(StatusCodes.CREATED).json({ linkstack });
 };
 
 const getAllLinkstacks = async (req, res) => {
-  res.send('create linkstack');
+  res.send('get all linkstacks');
 };
 
 const getSingleLinkstack = async (req, res) => {

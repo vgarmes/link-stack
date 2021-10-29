@@ -14,10 +14,7 @@ const {
   uploadImage,
 } = require('../controllers/linkstackController');
 
-router
-  .route('/')
-  .post([authenticateUser, authorizePermissions('admin')], createLinkstack)
-  .get(getAllLinkstacks);
+router.route('/').post(authenticateUser, createLinkstack).get(getAllLinkstacks);
 
 router
   .route('/:id')
