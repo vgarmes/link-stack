@@ -4,6 +4,7 @@ const {
   authenticateUser,
   authorizePermissions,
 } = require('../middleware/authentication');
+const upload = require('../middleware/image-upload');
 
 const {
   createLinkstack,
@@ -27,6 +28,10 @@ router
 
 router
   .route('/uploadImage')
-  .post([authenticateUser, authorizePermissions('admin')], uploadImage);
+  .post(
+    [authenticateUser, authorizePermissions('admin')],
+    upload.single('image'),
+    uploadImage
+  );
 
 module.exports = router;
