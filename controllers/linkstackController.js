@@ -1,6 +1,8 @@
 const Linkstack = require('../models/Linkstack');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
+const path = require('path');
+const cloudinary = require('cloudinary').v2;
 
 const createLinkstack = async (req, res) => {
   req.body.user = req.user.userId;
@@ -65,7 +67,33 @@ const deleteLinkstack = async (req, res) => {
 };
 
 const uploadImage = async (req, res) => {
-  res.send('upload image');
+  if (!req.files) {
+    throw new CustomError.BadRequestError('No file uploaded');
+  }
+
+  const linkstackImage = req.files.image;
+
+  if (!linkstackImage.mimetype.startsWith('image')) {
+    throw new CustomError.BadRequestError('Please upload an image');
+  }
+
+  const maxSize = 1024 * 1024;
+
+  if (linkstackImage.size > maxSize) {
+    throw new CustomError.BadRequestError(
+      'Please upload image smaller than 1MB'
+    );
+  }
+
+  /* const result = await cloudinary.uploader.upload(
+    req.files.image.tempFilePath,
+    { use_filename: true, folder: 'linkstack' }
+  ); */
+
+  console.log(req.files.image);
+
+  //res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
+  res.status(StatusCodes.OK).json({ msg: 'Success' });
 };
 
 module.exports = {
