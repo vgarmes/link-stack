@@ -15,6 +15,12 @@ const xss = require('xss-clean');
 const cors = require('cors');
 const mongoSanitize = require('express-mongo-sanitize');
 const fileUpload = require('express-fileupload');
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // database
 const connectDB = require('./db/connect');
@@ -44,6 +50,7 @@ app.use(mongoSanitize());
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET)); // cookies signed using same env var as JWT, it will be changed later
+app.use(fileUpload());
 
 // API
 app.get('/api/v1', (req, res) => {
