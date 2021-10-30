@@ -67,11 +67,11 @@ const deleteLinkstack = async (req, res) => {
 };
 
 const uploadImage = async (req, res) => {
-  if (!req.files) {
+  if (!req.file) {
     throw new CustomError.BadRequestError('No file uploaded');
   }
 
-  const linkstackImage = req.files.image;
+  /* const linkstackImage = req.files.image;
 
   if (!linkstackImage.mimetype.startsWith('image')) {
     throw new CustomError.BadRequestError('Please upload an image');
@@ -83,14 +83,14 @@ const uploadImage = async (req, res) => {
     throw new CustomError.BadRequestError(
       'Please upload image smaller than 1MB'
     );
-  }
+  } */
 
   /* const result = await cloudinary.uploader.upload(
     req.files.image.tempFilePath,
     { use_filename: true, folder: 'linkstack' }
   ); */
 
-  console.log(req.files.image);
+  console.log(req.file);
 
   //res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
   res.status(StatusCodes.OK).json({ msg: 'Success' });
