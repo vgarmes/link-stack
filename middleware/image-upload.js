@@ -1,6 +1,6 @@
 const multer = require('multer');
 
-const dir = './tmp/';
+const dir = '/tmp/';
 const maxSize = 1e6; // maximum file size in bytes
 
 const storage = multer.diskStorage({
