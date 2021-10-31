@@ -1,8 +1,8 @@
 const Linkstack = require('../models/Linkstack');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
-const path = require('path');
 const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 
 const createLinkstack = async (req, res) => {
   req.body.user = req.user.userId;
@@ -71,29 +71,17 @@ const uploadImage = async (req, res) => {
     throw new CustomError.BadRequestError('No file uploaded');
   }
 
-  /* const linkstackImage = req.files.image;
+  //const linkstackId = Linkstack.findOne({ user: req.user.userId });
 
-  if (!linkstackImage.mimetype.startsWith('image')) {
-    throw new CustomError.BadRequestError('Please upload an image');
-  }
+  // upload to cloudinary
+  const result = await cloudinary.uploader.upload(req.file.path, {
+    folder: 'linkstack',
+  });
 
-  const maxSize = 1024 * 1024;
+  // delete tmp file
+  fs.unlinkSync(req.file.path);
 
-  if (linkstackImage.size > maxSize) {
-    throw new CustomError.BadRequestError(
-      'Please upload image smaller than 1MB'
-    );
-  } */
-
-  /* const result = await cloudinary.uploader.upload(
-    req.files.image.tempFilePath,
-    { use_filename: true, folder: 'linkstack' }
-  ); */
-
-  console.log(req.file);
-
-  //res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
-  res.status(StatusCodes.OK).json({ msg: 'Success' });
+  res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
 };
 
 module.exports = {
