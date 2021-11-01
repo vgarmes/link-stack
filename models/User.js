@@ -1,7 +1,23 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const LinkstackSchema = require('./linkstack-schema');
+
+const SingleLinkSchema = new mongoose.Schema(
+  {
+    name: { type: String, maxlength: 100 },
+    icon: { type: String },
+    url: { type: String, maxlength: 1000 },
+  },
+  { _id: false }
+);
+
+const SingleSocialSchema = new mongoose.Schema(
+  {
+    icon: { type: String },
+    url: { type: String, maxlength: 1000 },
+  },
+  { _id: false }
+);
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -48,7 +64,11 @@ const UserSchema = new mongoose.Schema({
   passwordTokenExpirationDate: {
     type: Date,
   },
-  linkstack: LinkstackSchema,
+  avatar: String,
+  headline: { type: String, maxlength: [100, 'Headline is too long'] },
+  bio: { type: String, maxlength: [1000, 'Bio is too long'] },
+  links: [SingleLinkSchema],
+  social: [SingleSocialSchema],
 });
 
 // Hash password
