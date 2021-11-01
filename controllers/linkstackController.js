@@ -4,23 +4,6 @@ const CustomError = require('../errors');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 
-const createLinkstack = async (req, res) => {
-  req.body.user = req.user.userId;
-
-  const linkstackAlreadyExists = await Linkstack.findOne({
-    user: req.body.user,
-  });
-  if (linkstackAlreadyExists) {
-    throw new CustomError.BadRequestError(
-      `Linkstack already exists for user ${req.body.user}`
-    );
-  }
-
-  const linkstack = await Linkstack.create(req.body);
-
-  res.status(StatusCodes.CREATED).json({ linkstack });
-};
-
 const getAllLinkstacks = async (req, res) => {
   const linkstacks = await Linkstack.find({});
   res.status(StatusCodes.OK).json({ linkstacks, count: linkstacks.length });
@@ -85,7 +68,6 @@ const uploadImage = async (req, res) => {
 };
 
 module.exports = {
-  createLinkstack,
   getAllLinkstacks,
   getSingleLinkstack,
   updateLinkstack,
