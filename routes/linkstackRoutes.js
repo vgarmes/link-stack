@@ -7,31 +7,22 @@ const {
 const upload = require('../middleware/image-upload');
 
 const {
-  createLinkstack,
   getAllLinkstacks,
   getSingleLinkstack,
   updateLinkstack,
-  deleteLinkstack,
   uploadImage,
 } = require('../controllers/linkstackController');
 
 router
   .route('/')
-  .post(authenticateUser, createLinkstack)
   .get([authenticateUser, authorizePermissions('admin')], getAllLinkstacks);
 
 router
-  .route('/:id')
-  .get(getSingleLinkstack)
-  .patch([authenticateUser, authorizePermissions('admin')], updateLinkstack)
-  .delete([authenticateUser, authorizePermissions('admin')], deleteLinkstack);
-
-router
   .route('/uploadImage')
-  .post(
-    [authenticateUser, authorizePermissions('admin')],
-    upload.single('image'),
-    uploadImage
-  );
+  .post(authenticateUser, upload.single('image'), uploadImage);
+
+router.route('/updateLinkstack').patch(authenticateUser, updateLinkstack);
+
+router.route('/:username').get(getSingleLinkstack);
 
 module.exports = router;

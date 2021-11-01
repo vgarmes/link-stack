@@ -1,60 +1,47 @@
-const Linkstack = require('../models/Linkstack');
+const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 
 const getAllLinkstacks = async (req, res) => {
-  const linkstacks = await Linkstack.find({});
+  const linkstacks = await User.find({}).select('linkstack');
   res.status(StatusCodes.OK).json({ linkstacks, count: linkstacks.length });
 };
 
 const getSingleLinkstack = async (req, res) => {
-  const { id: linkstackId } = req.params;
+  const { username } = req.params;
 
-  const linkstack = await Linkstack.findOne({ _id: linkstackId });
+  const { linkstack } = await User.findOne({ username }).select('linkstack');
 
   if (!linkstack) {
-    throw new CustomError.NotFoundError(`No linkstack with id: ${linkstackId}`);
+    throw new CustomError.NotFoundError(
+      `No linkstack with username: ${username}`
+    );
   }
+  console.log(linkstack);
   res.status(StatusCodes.OK).json({ linkstack });
 };
 
 const updateLinkstack = async (req, res) => {
-  const { id: linkstackId } = req.params;
+  const { linkstack } = req.body;
 
-  const linkstack = await Linkstack.findOneAndUpdate(
-    { _id: linkstackId },
-    req.body,
-    { new: true, runValidators: true }
+  const { linkstack: updatedLinkstack } = await User.findOneAndUpdate(
+    { _id: req.user.userId },
+    { linkstack },
+    {
+      new: true,
+      runValidators: true,
+    }
   );
 
-  if (!linkstack) {
-    throw new CustomError.NotFoundError(`No linkstack with id: ${linkstackId}`);
-  }
-
-  res.status(StatusCodes.OK).json({ linkstack });
-};
-
-const deleteLinkstack = async (req, res) => {
-  const { id: linkstackId } = req.params;
-  const linkstack = await Linkstack.findOne({ _id: linkstackId });
-
-  if (!linkstack) {
-    throw new CustomError.NotFoundError(`No linkstack with id: ${linkstackId}`);
-  }
-
-  await linkstack.remove();
-
-  res.status(StatusCodes.OK).json({ msg: 'Success! Linkstack removed' });
+  res.status(StatusCodes.OK).json({ updatedLinkstack });
 };
 
 const uploadImage = async (req, res) => {
   if (!req.file) {
     throw new CustomError.BadRequestError('No file uploaded');
   }
-
-  //const linkstackId = Linkstack.findOne({ user: req.user.userId });
 
   // upload to cloudinary
   const result = await cloudinary.uploader.upload(req.file.path, {
@@ -64,13 +51,16 @@ const uploadImage = async (req, res) => {
   // delete tmp file
   fs.unlinkSync(req.file.path);
 
-  res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
+  if (!result) {
+    throw new CustomError.BadRequestError('File upload failed');
+  }
+
+  res.status(StatusCodes.OK).json({ image: result.secure_url });
 };
 
 module.exports = {
   getAllLinkstacks,
   getSingleLinkstack,
   updateLinkstack,
-  deleteLinkstack,
   uploadImage,
 };
