@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const LinkstackSchema = require('./linkstack-schema');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -47,6 +48,7 @@ const UserSchema = new mongoose.Schema({
   passwordTokenExpirationDate: {
     type: Date,
   },
+  linkstack: LinkstackSchema,
 });
 
 // Hash password
