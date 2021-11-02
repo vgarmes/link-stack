@@ -12,23 +12,25 @@ const getAllLinkstacks = async (req, res) => {
 const getSingleLinkstack = async (req, res) => {
   const { username } = req.params;
 
-  const { linkstack } = await User.findOne({ username }).select('linkstack');
+  const linkstack = await User.findOne({ username }).select(
+    'avatar headline bio links social'
+  );
 
   if (!linkstack) {
     throw new CustomError.NotFoundError(
       `No linkstack with username: ${username}`
     );
   }
-  console.log(linkstack);
+
   res.status(StatusCodes.OK).json({ linkstack });
 };
 
 const updateLinkstack = async (req, res) => {
-  const { linkstack } = req.body;
+  const { avatar, headline, bio, links, social } = req.body;
 
-  const { linkstack: updatedLinkstack } = await User.findOneAndUpdate(
+  const updatedLinkstack = await User.findOneAndUpdate(
     { _id: req.user.userId },
-    { linkstack },
+    { avatar, headline, bio, links, social },
     {
       new: true,
       runValidators: true,
