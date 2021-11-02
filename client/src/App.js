@@ -11,6 +11,7 @@ import {
   Verify,
   ForgotPassword,
   ResetPassword,
+  User,
 } from './pages';
 import { Layout } from './components';
 
@@ -39,6 +40,9 @@ function App() {
           </Route>
           <Route path="/user/reset-password">
             <ResetPassword />
+          </Route>
+          <Route path="/:username">
+            <User />
           </Route>
           <Route path="*">
             <Error />

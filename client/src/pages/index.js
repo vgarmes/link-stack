@@ -7,6 +7,7 @@ import PrivateRoute from './PrivateRoute';
 import Verify from './Verify';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
+import User from './User';
 
 export {
   Home,
@@ -18,4 +19,5 @@ export {
   Verify,
   ForgotPassword,
   ResetPassword,
+  User,
 };
