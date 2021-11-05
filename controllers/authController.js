@@ -20,6 +20,13 @@ function getOrigin(request) {
 const register = async (req, res) => {
   // check for duplicated email (though it's also set up as unique on the db)
   const { email, username, password } = req.body;
+  const usernameAlreadyExists = await User.findOne({ username });
+  if (usernameAlreadyExists) {
+    throw new CustomError.BadRequestError(
+      `Username ${username} already exists`
+    );
+  }
+
   const emailAlredyExists = await User.findOne({ email });
   if (emailAlredyExists) {
     throw new CustomError.BadRequestError('Email already exists');

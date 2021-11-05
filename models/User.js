@@ -14,6 +14,7 @@ const SingleLinkSchema = new mongoose.Schema(
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
+    unique: true,
     required: [true, 'Please provide name'],
     minlength: [3, 'Username is too short'],
     maxlength: [50, 'Username is too long'],
