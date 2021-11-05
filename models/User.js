@@ -11,14 +11,6 @@ const SingleLinkSchema = new mongoose.Schema(
   { _id: false }
 );
 
-const SingleSocialSchema = new mongoose.Schema(
-  {
-    icon: { type: String },
-    url: { type: String, maxlength: 1000 },
-  },
-  { _id: false }
-);
-
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -68,7 +60,7 @@ const UserSchema = new mongoose.Schema({
   headline: { type: String, maxlength: [100, 'Headline is too long'] },
   bio: { type: String, maxlength: [1000, 'Bio is too long'] },
   links: [SingleLinkSchema],
-  social: [SingleSocialSchema],
+  social: [SingleLinkSchema],
 });
 
 // Hash password
