@@ -6,6 +6,7 @@ import StyledForm from './StyledForm';
 import FormRow from './FormRow';
 import SectionCenter from './SectionCenter';
 import Button from './Button';
+import Avatar from './Avatar';
 export {
   Layout,
   Navbar,
@@ -15,4 +16,5 @@ export {
   FormRow,
   SectionCenter,
   Button,
+  Avatar,
 };
