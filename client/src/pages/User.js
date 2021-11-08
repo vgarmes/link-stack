@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
+import { Avatar } from '../components';
 import { LinkButton, SocialButton } from '../components/buttons';
 
 const dummyUser = {
@@ -56,15 +57,6 @@ const UserSection = styled.section`
 
   .avatar-container {
     margin-bottom: 16px;
-
-    & > img {
-      border-radius: 50%;
-      width: 96px;
-      height: 96px;
-      display: block;
-      object-fit: contain;
-      object-position: initial;
-    }
   }
 
   .user-headline {
@@ -109,7 +101,7 @@ const User = () => {
     <Wrapper>
       <UserSection>
         <div className="avatar-container">
-          <img src={dummyUser.avatar} alt={dummyUser.headline} />
+          <Avatar src={dummyUser.avatar} alt={dummyUser.headline} size={96} />
         </div>
         <div className="user-headline">
           <h1>{dummyUser.headline}</h1>
