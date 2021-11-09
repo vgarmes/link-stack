@@ -59,11 +59,7 @@ const Dashboard = () => {
       {linkstack && (
         <Avatar src={linkstack.avatar} alt="user avatar" size={96} />
       )}
-      <AvatarFileInput
-        setLoading={setLoading}
-        setAlert={showAlert}
-        onAvatarUpload={saveLinkstack}
-      />
+      <AvatarFileInput setAlert={showAlert} onAvatarUpload={saveLinkstack} />
     </Wrapper>
   );
 };
