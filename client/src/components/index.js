@@ -7,6 +7,7 @@ import FormRow from './FormRow';
 import SectionCenter from './SectionCenter';
 import Button from './Button';
 import Avatar from './Avatar';
+import AvatarFileInput from './AvatarFileInput';
 export {
   Layout,
   Navbar,
@@ -17,4 +18,5 @@ export {
   SectionCenter,
   Button,
   Avatar,
+  AvatarFileInput,
 };

@@ -6,7 +6,7 @@ const StyledImg = styled.img`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
   object-position: initial;
 `;
 

@@ -1,19 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSessionContext } from '../context/session-context';
 import axios from 'axios';
-import { Avatar } from '../components';
+import { Avatar, AvatarFileInput } from '../components';
+import useLocalState from '../hooks/useLocalState';
 
 const Dashboard = () => {
   const { user } = useSessionContext();
   const [linkstack, setLinkstack] = useState();
+  const { alert, showAlert, loading, setLoading, hideAlert } = useLocalState();
 
   const fetchLinkstack = async () => {
+    hideAlert();
+    setLoading(true);
     try {
-      const { data } = await axios.get(`/api/v1/linkstacks/${user.username}`);
-      if (data && data.linkstack) {
-        setLinkstack(data.linkstack);
-      }
+      const response = await axios.get(`/api/v1/linkstacks/${user.username}`);
+      setLinkstack(response.data.linkstack);
+    } catch (error) {
+      showAlert(error);
+    }
+    setLoading(false);
+  };
+
+  const saveLinkstack = async (fields) => {
+    try {
+      // update cloud linkstack
+      const response = await axios.patch(
+        '/api/v1/linkstacks/updateLinkstack',
+        fields
+      );
+      // update local linkstack
+      setLinkstack({ ...linkstack, ...fields });
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -24,16 +42,27 @@ const Dashboard = () => {
     // eslint-disable-next-line
   }, []);
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (alert.show) {
+    return <p>{alert.text}</p>;
+  }
+
   return (
     <Wrapper>
       <h2>
         Hello there, <span>{user.username}</span>
       </h2>
       <p>This is your dashboard.</p>
-      <Avatar
-        src="https://randomuser.me/api/portraits/men/75.jpg"
-        alt="avatar"
-        size={96}
+      {linkstack && (
+        <Avatar src={linkstack.avatar} alt="user avatar" size={96} />
+      )}
+      <AvatarFileInput
+        setLoading={setLoading}
+        setAlert={showAlert}
+        onAvatarUpload={saveLinkstack}
       />
     </Wrapper>
   );
