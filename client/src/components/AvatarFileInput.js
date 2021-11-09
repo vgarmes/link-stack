@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
 import axios from 'axios';
 
-const AvatarFileInput = ({ setLoading, setAlert, onAvatarUpload }) => {
-  const inputRef = useRef();
+import { Button } from './buttons';
 
-  const handleSubmit = async (e) => {
-    setLoading(true);
-    e.preventDefault();
+const AvatarFileInput = ({ setAlert, onAvatarUpload }) => {
+  const inputRef = useRef();
+  const [image, setImage] = React.useState();
+
+  const handleSubmit = async () => {
     const fd = new FormData();
     fd.append('avatar', inputRef.current.files[0]);
     try {
@@ -16,23 +17,45 @@ const AvatarFileInput = ({ setLoading, setAlert, onAvatarUpload }) => {
     } catch (error) {
       setAlert(error);
     }
-    setLoading(false);
+  };
+
+  const displayImage = () => {
+    if (inputRef.current.files[0]) {
+      setImage(URL.createObjectURL(inputRef.current.files[0]));
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="avatar">
-        Choose an avatar:
-        <input
-          type="file"
-          id="avatar-upload"
-          name="avatar"
-          accept="image/*"
-          ref={inputRef}
+    <>
+      <input
+        type="file"
+        id="avatar-upload"
+        name="avatar"
+        accept="image/*"
+        style={{ display: 'none' }}
+        ref={inputRef}
+        onChange={displayImage}
+      />
+
+      <Button
+        size="sm"
+        colorScheme="secondary"
+        onClick={() => inputRef.current.click()}
+      >
+        Pick file
+      </Button>
+
+      <Button size="sm" colorScheme="primary" onClick={handleSubmit}>
+        Update avatar
+      </Button>
+      {image && (
+        <img
+          src={image}
+          alt="upload"
+          onLoad={() => URL.revokeObjectURL(image)}
         />
-      </label>
-      <button type="submit">Upload</button>
-    </form>
+      )}
+    </>
   );
 };
 
