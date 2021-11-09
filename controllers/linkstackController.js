@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 
 const getAllLinkstacks = async (req, res) => {
   const linkstacks = await User.find({}).select('linkstack');
@@ -43,7 +45,7 @@ const updateAvatar = async (req, res) => {
     throw new CustomError.BadRequestError('No file uploaded to cloud');
   }
 
-  const updatedLinkstack = await User.findOneAndUpdate(
+  await User.findOneAndUpdate(
     { _id: req.user.userId },
     { avatar: req.file_url },
     {
@@ -52,10 +54,10 @@ const updateAvatar = async (req, res) => {
     }
   );
 
-  res.status(StatusCodes.OK).json({ updatedLinkstack });
+  res.status(StatusCodes.OK).json({ avatar: req.file_url });
 };
 
-/* const uploadImage = async (req, res) => {
+const uploadImage = async (req, res) => {
   if (!req.file) {
     throw new CustomError.BadRequestError('No file uploaded');
   }
@@ -73,11 +75,12 @@ const updateAvatar = async (req, res) => {
   }
 
   res.status(StatusCodes.OK).json({ image: result.secure_url });
-}; */
+};
 
 module.exports = {
   getAllLinkstacks,
   getSingleLinkstack,
   updateLinkstack,
   updateAvatar,
+  uploadImage,
 };

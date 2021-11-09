@@ -4,16 +4,13 @@ const {
   authenticateUser,
   authorizePermissions,
 } = require('../middleware/authentication');
-const {
-  uploadToServer,
-  uploadCloudinary,
-} = require('../middleware/image-upload');
+const { uploadToServer } = require('../middleware/image-upload');
 
 const {
   getAllLinkstacks,
   getSingleLinkstack,
   updateLinkstack,
-  updateAvatar,
+  uploadImage,
 } = require('../controllers/linkstackController');
 
 router
@@ -21,13 +18,8 @@ router
   .get([authenticateUser, authorizePermissions('admin')], getAllLinkstacks);
 
 router
-  .route('/updateAvatar')
-  .patch(
-    authenticateUser,
-    uploadToServer.single('avatar'),
-    uploadCloudinary,
-    updateAvatar
-  );
+  .route('/uploadAvatar')
+  .post(authenticateUser, uploadToServer.single('avatar'), uploadImage);
 
 router.route('/updateLinkstack').patch(authenticateUser, updateLinkstack);
 
