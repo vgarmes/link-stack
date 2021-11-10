@@ -1,21 +1,47 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const StyledImg = styled.img`
-  border-radius: 50%;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
-  display: block;
-  object-fit: cover;
-  object-position: initial;
+const hoverStyle = css`
+  &:hover:after {
+    position: absolute;
+    content: '';
+    background-color: ${({ theme }) => theme.colors['hover-overlay']};
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
 `;
 
-StyledImg.defaultProps = {
+const Wrapper = styled.div`
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
+
+  ${({ hoverEffect }) => (hoverEffect ? hoverStyle : ``)}
+
+  img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: initial;
+  }
+`;
+
+Wrapper.defaultProps = {
   size: 96,
+  hoverEffect: false,
 };
 
-const Avatar = ({ size, ...rest }) => {
-  return <StyledImg size={size} {...rest} />;
+const Avatar = ({ src, alt, hoverEffect, ...rest }) => {
+  return (
+    <Wrapper hoverEffect={hoverEffect} {...rest}>
+      <img src={src} alt={alt} />
+    </Wrapper>
+  );
 };
 
 export default Avatar;
