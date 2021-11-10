@@ -58,7 +58,13 @@ const Dashboard = () => {
       </h2>
       <p>This is your dashboard.</p>
       {linkstack && (
-        <Avatar src={linkstack.avatar} alt="user avatar" size={96} />
+        <Avatar
+          src={linkstack.avatar}
+          alt="user avatar"
+          size={96}
+          hoverEffect={true}
+          onClick={() => setIsModalOpen(true)}
+        />
       )}
       <AvatarFileInput
         setAlert={showAlert}
