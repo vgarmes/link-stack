@@ -10,7 +10,7 @@ const StyledHeader = styled.header`
   position: fixed;
   top: 0;
   height: var(--nav-height);
-  z-index: 11;
+  z-index: 1;
   transition: var(--transition);
   width: 100%;
 `;
