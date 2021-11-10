@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import useOnClickOutside from '../hooks/useOnClickOutside';
+import { IoCloseSharp } from 'react-icons/io5';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -16,6 +17,7 @@ const Wrapper = styled.div`
   justify-content: center;
 
   .modal-content {
+    position: relative;
     background-color: ${({ theme }) => theme.colors.background};
     margin: auto;
     border-radius: var(--borderRadius);
@@ -28,7 +30,14 @@ const Wrapper = styled.div`
     }
   }
 
-  @media and;
+  .close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.tertiary};
+  }
 `;
 
 const Modal = ({ children, isOpen, setIsOpen }) => {
@@ -36,8 +45,15 @@ const Modal = ({ children, isOpen, setIsOpen }) => {
   useOnClickOutside(modalRef, () => setIsOpen(false));
 
   return (
-    <Wrapper ref={modalRef}>
-      <div className="modal-content">{children}</div>
+    <Wrapper ref={modalRef} isOpen={isOpen}>
+      <div className="modal-content">
+        <div className="modal-header">
+          <button className="close-button" onClick={() => setIsOpen(false)}>
+            <IoCloseSharp size={20} />
+          </button>
+        </div>
+        {children}
+      </div>
     </Wrapper>
   );
 };
