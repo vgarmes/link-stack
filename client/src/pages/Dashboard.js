@@ -8,6 +8,7 @@ import useLocalState from '../hooks/useLocalState';
 const Dashboard = () => {
   const { user } = useSessionContext();
   const [linkstack, setLinkstack] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { alert, showAlert, loading, setLoading, hideAlert } = useLocalState();
 
   const fetchLinkstack = async () => {
@@ -59,7 +60,13 @@ const Dashboard = () => {
       {linkstack && (
         <Avatar src={linkstack.avatar} alt="user avatar" size={96} />
       )}
-      <AvatarFileInput setAlert={showAlert} onAvatarUpload={saveLinkstack} />
+      <AvatarFileInput
+        setAlert={showAlert}
+        onAvatarUpload={saveLinkstack}
+        previewSize={96}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
     </Wrapper>
   );
 };
