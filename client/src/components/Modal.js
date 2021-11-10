@@ -45,8 +45,8 @@ const Modal = ({ children, isOpen, setIsOpen }) => {
   useOnClickOutside(modalRef, () => setIsOpen(false));
 
   return (
-    <Wrapper ref={modalRef} isOpen={isOpen}>
-      <div className="modal-content">
+    <Wrapper isOpen={isOpen}>
+      <div className="modal-content" ref={modalRef}>
         <div className="modal-header">
           <button className="close-button" onClick={() => setIsOpen(false)}>
             <IoCloseSharp size={20} />
