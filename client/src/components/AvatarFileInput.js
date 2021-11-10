@@ -1,9 +1,29 @@
 import React, { useRef } from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
-
 import { Button } from './buttons';
+import { Avatar, Modal } from '.';
 
-const AvatarFileInput = ({ setAlert, onAvatarUpload }) => {
+const AvatarContainer = styled.div`
+  min-height: ${({ height }) => height}px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+`;
+
+const ButtonGroup = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+`;
+
+const AvatarFileInput = ({
+  setAlert,
+  onAvatarUpload,
+  previewSize,
+  isModalOpen,
+  setIsModalOpen,
+}) => {
   const inputRef = useRef();
   const [image, setImage] = React.useState();
 
@@ -26,7 +46,18 @@ const AvatarFileInput = ({ setAlert, onAvatarUpload }) => {
   };
 
   return (
-    <>
+    <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
+      <AvatarContainer height={previewSize}>
+        {image && (
+          <Avatar
+            src={image}
+            alt="upload preview"
+            onLoad={() => URL.revokeObjectURL(image)}
+            size={previewSize}
+          />
+        )}
+      </AvatarContainer>
+
       <input
         type="file"
         id="avatar-upload"
@@ -37,25 +68,20 @@ const AvatarFileInput = ({ setAlert, onAvatarUpload }) => {
         onChange={displayImage}
       />
 
-      <Button
-        size="sm"
-        colorScheme="secondary"
-        onClick={() => inputRef.current.click()}
-      >
-        Pick file
-      </Button>
+      <ButtonGroup>
+        <Button
+          size="sm"
+          colorScheme="primary"
+          onClick={() => inputRef.current.click()}
+        >
+          Pick file
+        </Button>
 
-      <Button size="sm" colorScheme="primary" onClick={handleSubmit}>
-        Update avatar
-      </Button>
-      {image && (
-        <img
-          src={image}
-          alt="upload"
-          onLoad={() => URL.revokeObjectURL(image)}
-        />
-      )}
-    </>
+        <Button size="sm" colorScheme="secondary" onClick={handleSubmit}>
+          Update avatar
+        </Button>
+      </ButtonGroup>
+    </Modal>
   );
 };
 
