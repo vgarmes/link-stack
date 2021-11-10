@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Button } from './buttons';
 import { Avatar, Modal } from '.';
+import defaultAvatar from '../assets/images/default-profile.png';
 
 const AvatarContainer = styled.div`
   min-height: ${({ height }) => height}px;
@@ -25,7 +26,7 @@ const AvatarFileInput = ({
   setIsModalOpen,
 }) => {
   const inputRef = useRef();
-  const [image, setImage] = React.useState();
+  const [image, setImage] = React.useState(defaultAvatar);
 
   const handleSubmit = async () => {
     const fd = new FormData();
