@@ -22,6 +22,7 @@ export const COLORS = {
     'subtle-background': 'hsl(225deg, 25%, 95%)',
     'subtle-floating': 'hsl(0deg, 0%, 100%)',
     'primary-accent': 'hsl(245deg, 100%, 90%)',
+    'hover-overlay': 'hsl(0deg, 0%, 0%, 0.05)',
   },
   dark: {
     text: 'hsl(0deg, 0%, 100%)',
@@ -46,6 +47,7 @@ export const COLORS = {
     'subtle-background': 'hsl(210deg, 30%, 8%)',
     'subtle-floating': 'hsl(210deg, 22%, 15%)',
     'primary-accent': 'hsl(230deg, 50%, 30%)',
+    'hover-overlay': 'hsl(0,0,0,0.05)',
   },
 };
 
