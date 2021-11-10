@@ -8,6 +8,7 @@ import SectionCenter from './SectionCenter';
 import Button from './Button';
 import Avatar from './Avatar';
 import AvatarFileInput from './AvatarFileInput';
+import Modal from './Modal';
 export {
   Layout,
   Navbar,
@@ -19,4 +20,5 @@ export {
   Button,
   Avatar,
   AvatarFileInput,
+  Modal,
 };
