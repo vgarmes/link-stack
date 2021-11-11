@@ -15,16 +15,16 @@ const Wrapper = styled.div`
   text-transform: capitalize;
 
   &.danger {
-    color: var(--red-dark);
-    background: var(--red-light);
+    color: var(--color-red-dark);
+    background: var(--color-red-light);
   }
   &.success {
-    color: var(--green-dark);
-    background: var(--green-light);
+    color: var(--color-green-dark);
+    background: var(--color-green-light);
   }
   &.loading {
-    color: black;
-    background: yellow;
+    color: var(--color-alert-text);
+    background: var(--color-alert);
   }
 `;
 
