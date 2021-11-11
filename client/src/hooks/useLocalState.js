@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const useLocalState = () => {
   const [alert, setAlert] = useState({
@@ -16,6 +16,18 @@ const useLocalState = () => {
   const hideAlert = () => {
     setAlert({ show: false, text: '', type: 'danger' });
   };
+
+  useEffect(() => {
+    if (alert.show && (alert.type === 'danger' || alert.type === 'success')) {
+      const timer = setTimeout(() => {
+        hideAlert();
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [alert]);
 
   return {
     alert,
