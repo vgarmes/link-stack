@@ -1,32 +1,40 @@
 import { css } from 'styled-components';
+import { COLORS } from './colors';
+
+const colorMode = 'light';
 
 const variables = css`
   :root {
     /* colors */
-    --color-background: white;
-    --color-text: hsl(222deg, 22%, 5%);
-    --color-primary: hsl(245deg, 100%, 60%);
-    --color-secondary: hsl(333deg, 100%, 45%);
-    --color-tertiary: hsl(255deg, 85%, 30%);
+    --color-background: ${COLORS[colorMode].background};
+    --color-subtle-background: ${COLORS[colorMode]['subtle-background']};
+    --color-text: ${COLORS[colorMode].text};
+    --color-primary: ${COLORS[colorMode].primary};
+    --color-secondary: ${COLORS[colorMode].secondary};
+    --color-tertiary: ${COLORS[colorMode].tertiary};
+    --color-primary-accent: ${COLORS[colorMode]['primary-accent']};
 
     /* grey */
-    --grey-50: #f8fafc;
-    --grey-100: #f1f5f9;
-    --grey-200: #e2e8f0;
-    --grey-300: #cbd5e1;
-    --grey-400: #94a3b8;
-    --grey-500: #64748b;
-    --grey-600: #475569;
-    --grey-700: #334155;
-    --grey-800: #1e293b;
-    --grey-900: #0f172a;
+    --color-grey-50: ${COLORS[colorMode]['gray-50']};
+    --color-grey-100: ${COLORS[colorMode]['gray-100']};
+    --color-grey-200: ${COLORS[colorMode]['gray-200']};
+    --color-grey-300: ${COLORS[colorMode]['gray-300']};
+    --color-grey-400: ${COLORS[colorMode]['gray-400']};
+    --color-grey-500: ${COLORS[colorMode]['gray-500']};
+    --color-grey-600: ${COLORS[colorMode]['gray-600']};
+    --color-grey-700: ${COLORS[colorMode]['gray-700']};
+    --color-grey-900: ${COLORS[colorMode]['gray-900']};
     /* rest of the colors */
-    --black: #222;
-    --white: #fff;
-    --red-light: #f8d7da;
-    --red-dark: #842029;
-    --green-light: #d1e7dd;
-    --green-dark: #0f5132;
+    --color-black: #222;
+    --color-white: #fff;
+    --color-red-light: #f8d7da;
+    --color-red-dark: #842029;
+    --color-green-light: #d1e7dd;
+    --color-green-dark: #0f5132;
+    --color-subtle-floating: ${COLORS[colorMode]['subtle-floating']};
+    --color-hover-overlay: ${COLORS[colorMode]['hover-overlay']};
+    --color-alert: ${COLORS[colorMode]['alert']};
+    --color-alert-text: ${COLORS[colorMode]['alert-text']};
 
     /* fonts  */
     --ff-primary: 'Karla', sans-serif;
