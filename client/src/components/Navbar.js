@@ -78,11 +78,12 @@ const Navbar = () => {
                 <Button
                   size="sm"
                   colorScheme="secondary"
+                  variant="outline"
                   onClick={() => {
                     logoutUser();
                   }}
                 >
-                  <span style={{ textTransform: 'uppercase' }}>Log out</span>
+                  Log out
                 </Button>
               </>
             ) : (
