@@ -19,7 +19,7 @@ const ButtonGroup = styled.div`
 `;
 
 const AvatarFileInput = ({
-  setAlert,
+  showAlert,
   onAvatarUpload,
   previewSize,
   isModalOpen,
@@ -29,14 +29,15 @@ const AvatarFileInput = ({
   const [image, setImage] = React.useState(defaultAvatar);
 
   const handleSubmit = async () => {
+    showAlert({ text: 'Uploading...', type: 'loading' });
     const fd = new FormData();
     fd.append('avatar', inputRef.current.files[0]);
     try {
       const response = await axios.post('/api/v1/linkstacks/uploadAvatar', fd);
-      onAvatarUpload({ avatar: response.data.image });
-      console.log(response);
+      setIsModalOpen(false);
+      onAvatarUpload({ avatar: response.data.image }); // success message will show after updating local state
     } catch (error) {
-      setAlert(error);
+      showAlert({ text: error, type: 'danger' });
     }
   };
 
