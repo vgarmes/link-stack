@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSessionContext } from '../context/session-context';
 import axios from 'axios';
-import { Avatar, AvatarFileInput } from '../components';
+import { Avatar, AvatarFileInput, Alert } from '../components';
 import useLocalState from '../hooks/useLocalState';
 
 const Dashboard = () => {
@@ -24,6 +24,8 @@ const Dashboard = () => {
   };
 
   const saveLinkstack = async (fields) => {
+    hideAlert();
+    showAlert({ text: 'Syncing...', type: 'loading' });
     try {
       // update cloud linkstack
       const response = await axios.patch(
@@ -32,7 +34,7 @@ const Dashboard = () => {
       );
       // update local linkstack
       setLinkstack({ ...linkstack, ...fields });
-      console.log(response);
+      showAlert({ text: 'Success!', type: 'success' });
     } catch (error) {
       console.log(error);
     }
@@ -47,12 +49,9 @@ const Dashboard = () => {
     return <p>Loading...</p>;
   }
 
-  if (alert.show) {
-    return <p>{alert.text}</p>;
-  }
-
   return (
     <Wrapper>
+      {alert.show && <Alert type={alert.type}>{alert.text}</Alert>}
       <h2>
         Hello there, <span>{user.username}</span>
       </h2>
@@ -67,7 +66,7 @@ const Dashboard = () => {
         />
       )}
       <AvatarFileInput
-        setAlert={showAlert}
+        showAlert={showAlert}
         onAvatarUpload={saveLinkstack}
         previewSize={96}
         isModalOpen={isModalOpen}
