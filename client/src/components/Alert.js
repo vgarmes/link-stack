@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
+  position: fixed;
+  bottom: 5%;
+  z-index: 100;
   padding: 0.375rem 0.75rem;
   margin: 0 auto;
   border-color: transparent;
@@ -18,6 +21,10 @@ const Wrapper = styled.div`
   &.success {
     color: var(--green-dark);
     background: var(--green-light);
+  }
+  &.loading {
+    color: black;
+    background: yellow;
   }
 `;
 
