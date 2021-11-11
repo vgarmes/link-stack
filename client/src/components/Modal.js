@@ -21,12 +21,14 @@ const Wrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.background};
     margin: auto;
     border-radius: var(--borderRadius);
-    width: 60%;
+    width: 90%;
     padding: 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
     @media (min-width: ${({ theme }) => theme.breakpoints.tabletS}) {
       padding: 40px;
+      width: 100%;
+      max-width: ${({ theme }) => theme.breakpoints.tabletS};
     }
   }
 
