@@ -5,10 +5,10 @@ import Alert from './Alert';
 import StyledForm from './StyledForm';
 import FormRow from './FormRow';
 import SectionCenter from './SectionCenter';
-import Button from './Button';
 import Avatar from './Avatar';
 import AvatarFileInput from './AvatarFileInput';
 import Modal from './Modal';
+import Button from './buttons/Button';
 export {
   Layout,
   Navbar,
@@ -17,8 +17,8 @@ export {
   StyledForm,
   FormRow,
   SectionCenter,
-  Button,
   Avatar,
   AvatarFileInput,
   Modal,
+  Button,
 };
