@@ -74,6 +74,7 @@ const AvatarFileInput = ({
         <Button
           size="sm"
           colorScheme="primary"
+          variant="outline"
           onClick={() => inputRef.current.click()}
         >
           Pick file
